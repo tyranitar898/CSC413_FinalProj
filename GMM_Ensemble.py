@@ -59,18 +59,6 @@ def generateData(fileName):
                     Xlabels.append(name)
     return X, Xlabels
 
-
-# def GMM_pred(n, fileNameStr):
-#     #  activePlayerCareerRegSeasonStats.txt  allPlayerCareerRegSeasonStats.txt
-#     X, Xlabels = generateData('./data/' + fileNameStr)
-#     gmm = GaussianMixture(n_components=n).fit(X)
-#     labels = gmm.predict(X)
-#     pred = []
-#     for i in range(len(labels)):
-#         # pred[Xlabels[i]] = labels[i]
-#         pred.append({"class": int(labels[i]),"name": Xlabels[i]})
-#     return pred
-
 def GMM_pred(n, fileNameStr):
     #  activePlayerCareerRegSeasonStats.txt  allPlayerCareerRegSeasonStats.txt
     X, Xlabels = generateData('./data/' + fileNameStr)
@@ -194,7 +182,7 @@ def getAllGames(fileName, player_type_dict):
                         t2_index = TEAMDICT[team2]
 
                        
-                        player_usage_per_game[g_id] = {"team1":team1, "t1players": [(curplayer,dataline_seperated[7])], "team2":team2, "t2players":[], "win": winngTeamIndex}
+                        player_usage_per_game[g_id] = {"team1":team1, "t1players": [(curplayer,dataline_seperated[7])], "team2":team2, "t2players":[], "win": win}
                         
     
     #gets X,Y where each data point is X is the TOPX players categories by GMM (top determined by minutes) and Y is the winning team
@@ -253,9 +241,6 @@ def GMM_NN(kcluster):
 
     XX = np.array(X)
     YY = np.array(Y)
-
-
-                
     X_train, X_test, y_train, y_test = train_test_split(XX, YY, test_size=0.2, random_state=42)
 
     clf = MLPClassifier(random_state=1, max_iter=500, batch_size = 100, solver="adam", learning_rate_init=0.005).fit(X_train, y_train)
@@ -263,7 +248,6 @@ def GMM_NN(kcluster):
     return score
 
 for i in range(30, 40):
-    kclusters = 10
     cur_score = GMM_NN(i)
     print("iteration {} with {} clusters GMM_NN gets prediction accuracy: {}".format(i-30, i, cur_score))
 
